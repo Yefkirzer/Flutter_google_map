@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:profile/Location_with_button/loc_marker_pressed.dart';
 
 import 'Location_with_button/loc_with_but.dart';
 import 'Location_with_button/loc_with_carousel.dart';
@@ -61,10 +62,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialPageRoute(builder: (context) => LocWithTab()));
                 }),
             RaisedButton(
-                child: Text("Location with TabBar"),
+                child: Text("Location with Carouselr"),
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LocWithCar()));
+                }),
+            RaisedButton(
+                child: Text("Location with Marker move"),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LocMarker()));
                 }),
           ],
         ),

@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class LocWithCar extends StatefulWidget {
-  const LocWithCar({Key? key}) : super(key: key);
+class LocMarker extends StatefulWidget {
+  const LocMarker({Key? key}) : super(key: key);
 
   @override
-  _LocWithCarState createState() => _LocWithCarState();
+  _LocMarkerState createState() => _LocMarkerState();
 }
 
-class _LocWithCarState extends State<LocWithCar> {
+class _LocMarkerState extends State<LocMarker> {
   int _current = 0;
+  int i = 0;
   late List<companyprofifle> profile = [];
   List<Marker> _markers = [];
+  CarouselController carouselController = CarouselController();
+
   @override
   void initState() {
     companyprofifle kaldis = new companyprofifle(
@@ -36,9 +39,16 @@ class _LocWithCarState extends State<LocWithCar> {
         imgurl: 'images/kaldis.jpg',
         lat: 8.9568,
         lon: 38.7638);
+    companyprofifle Mus = new companyprofifle(
+        name: "mus",
+        disc: "Bole Branch",
+        imgurl: 'images/kaldis.jpg',
+        lat: 9.038333,
+        lon: 38.761944);
     profile.add(kaldisI);
     profile.add(kaldisII);
     profile.add(kaldis);
+    profile.add(Mus);
   }
 
   GoogleMapController? _controller;
@@ -52,9 +62,26 @@ class _LocWithCarState extends State<LocWithCar> {
     });
   }
 
+  List<Marker> buildMarkers() {
+    var markers = profile.map((e) {
+      int index = profile.indexOf(e);
+      return Marker(
+          onTap: () {
+            carouselController.jumpToPage(index);
+          },
+          draggable: true,
+          markerId: MarkerId(index.toString()),
+          position: LatLng(e.lat, e.lon));
+    }).toList();
+    return markers;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    setState(() {
+      _markers = buildMarkers();
+    });
     print(_markers.length);
     return Scaffold(
       body: SafeArea(
@@ -76,9 +103,11 @@ class _LocWithCarState extends State<LocWithCar> {
               margin: EdgeInsets.only(bottom: 10),
               alignment: Alignment.bottomCenter,
               child: CarouselSlider.builder(
+                carouselController: carouselController,
                 itemCount: profile.length,
                 itemBuilder:
                     (BuildContext context, int itemIndex, int pageViewIndex) {
+                  i = itemIndex;
                   return Container(
                     child: Card(
                         elevation: 10,
@@ -137,7 +166,6 @@ class _LocWithCarState extends State<LocWithCar> {
                     }),
               ),
             ),
-
             // ListView.builder(
             //     itemCount: profile.length,
             //     shrinkWrap: true,
@@ -196,17 +224,17 @@ class _LocWithCarState extends State<LocWithCar> {
       target: LatLng(lati, longt),
       zoom: 15,
     )));
-    _markers.clear();
-    setState(() {
-      // _controller = controller;
-      _markers.add(Marker(
-          onTap: () {
-            profile[0];
-          },
-          draggable: true,
-          markerId: MarkerId("id-2"),
-          position: LatLng(lati, longt)));
-    });
+    // _markers.clear();
+    // setState(() {
+    //   // _controller = controller;
+    //   _markers.add(Marker(
+    //       onTap: () {
+    //         profile[0];
+    //       },
+    //       draggable: true,
+    //       markerId: MarkerId("id-2"),
+    //       position: LatLng(lati, longt)));
+    // });
   }
 }
 

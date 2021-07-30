@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:profile/company_profile/review.dart';
 import 'package:profile/company_profile/location.dart';
-import 'package:profile/company_profile/discription.dart';
+import 'package:profile/company_profile/products.dart';
+
+import 'description.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -17,7 +19,7 @@ class _ProfileState extends State<Profile> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         backgroundColor: Color(0xFFF2647C),
         body: SafeArea(
@@ -159,6 +161,7 @@ class _ProfileState extends State<Profile> {
                     indicatorPadding: EdgeInsets.only(right: 15.0, left: 15.0),
                     tabs: [
                       Tab(text: 'Discription'),
+                      Tab(text: 'Product'),
                       Tab(text: 'Review'),
                       Tab(text: 'Location'),
                     ],
@@ -176,6 +179,7 @@ class _ProfileState extends State<Profile> {
               child: TabBarView(
                 children: [
                   Discription(),
+                  Products(),
                   Review(),
                   Location(),
                 ],
@@ -187,4 +191,41 @@ class _ProfileState extends State<Profile> {
     );
     ;
   }
+}
+
+class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final double expandedHeight;
+
+  const CustomSliverAppBarDelegate({
+    required this.expandedHeight,
+  });
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final size = 60;
+    final top =
+        expandedHeight - shrinkOffset - size / 2; // TODO: implement build
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement maxExtent
+  double get maxExtent => expandedHeight;
+  @override
+  // TODO: implement minExtent
+  double get minExtent => kToolbarHeight + 30;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      true;
+
+  double appear(double shrinkOffset) => shrinkOffset / expandedHeight;
+
+  double disappear(double shrinkOffset) => 1 - shrinkOffset / expandedHeight;
+
+  Widget buildAppBar(double shrinkOffset) => Opacity(
+      opacity: appear(shrinkOffset),
+      child: AppBar(
+        title: Text("Profile"),
+      ));
 }

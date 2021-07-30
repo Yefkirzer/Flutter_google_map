@@ -3,14 +3,14 @@ import 'package:page_transition/page_transition.dart';
 import 'constants.dart';
 import 'juice_list.dart';
 
-class Discription extends StatefulWidget {
-  const Discription({Key? key}) : super(key: key);
+class Products extends StatefulWidget {
+  const Products({Key? key}) : super(key: key);
 
   @override
-  _DiscriptionState createState() => _DiscriptionState();
+  _ProductsState createState() => _ProductsState();
 }
 
-class _DiscriptionState extends State<Discription> {
+class _ProductsState extends State<Products> {
   final productList = [
     {
       'title': 'Margherita Pizza',

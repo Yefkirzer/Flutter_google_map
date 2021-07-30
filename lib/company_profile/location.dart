@@ -17,7 +17,7 @@ class _LocationState extends State<Location> {
             markerId: MarkerId("id-1"),
             position: LatLng(9.0335, 38.7637),
             infoWindow: InfoWindow(
-                title: "Kasu cafe",
+                title: "Kaldis cafe",
                 snippet: "call on 0912345678 for more info")),
       );
     });
