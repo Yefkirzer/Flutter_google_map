@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:profile/Location_with_button/loc_marker_pressed.dart';
+import 'package:profile/qr/qr_scanner.dart';
 
 import 'Location_with_button/loc_with_but.dart';
 import 'Location_with_button/loc_with_carousel.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -72,6 +74,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LocMarker()));
+                }),
+            RaisedButton(
+                child: Text("QR Scanner with Url"),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => QrScanner()));
                 }),
           ],
         ),
