@@ -1,8 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:flutter_beep/flutter_beep.dart';
+import 'list_QR.dart';
 
 class QrScanner extends StatefulWidget {
   const QrScanner({Key? key}) : super(key: key);
@@ -17,13 +19,27 @@ class _QrScannerState extends State<QrScanner> {
   Barcode? barcode;
 
   Future<void> _launchInApp(Barcode barcode) async {
-    if (await canLaunch(barcode!.code)) {
-      await launch(barcode!.code,
+    if (await canLaunch(barcode.code)) {
+      await launch(barcode.code,
           forceSafariVC: true,
           forceWebView: true,
           headers: <String, String>{'header_key': 'header_value'});
     } else {
       throw 'Could not launch ${barcode!.code}';
+    }
+  }
+
+  Future<void> intiateVibration() async {
+    if (barcode != null) {
+      await Vibrate.vibrate();
+      await FlutterBeep.beep();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => QRToList(
+                    barcode: barcode,
+                  )));
+      controller!.pauseCamera();
     }
   }
 
@@ -45,6 +61,7 @@ class _QrScannerState extends State<QrScanner> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    intiateVibration();
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -53,7 +70,7 @@ class _QrScannerState extends State<QrScanner> {
             buildQrView(context),
             Positioned(top: 10, child: buildControlButtons()),
             // Positioned(bottom: 180, child: buildResult()),
-            Positioned(bottom: 170, child: buttonForUrl())
+            Positioned(bottom: size.height / 6, child: buttonForUrl())
           ],
         ),
       ),
@@ -115,16 +132,6 @@ class _QrScannerState extends State<QrScanner> {
           style: TextStyle(color: Colors.white),
         ),
       );
-
-  // Widget buildResult() => Container(
-  //       padding: EdgeInsets.all(12),
-  //       decoration: BoxDecoration(
-  //           color: Colors.white24, borderRadius: BorderRadius.circular(8)),
-  //       child: Text(
-  //         barcode != null ? '${barcode!.code}' : 'QR URL goes here',
-  //         maxLines: 3,
-  //       ),
-  //     );
   Widget buildQrView(BuildContext context) => QRView(
         key: qrKey,
         onQRViewCreated: onQRViewCreated,
